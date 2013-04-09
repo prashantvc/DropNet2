@@ -12,20 +12,14 @@ namespace DropNet2
         /// Auth Step 1. Gets a Request Token which is required for the login request
         /// </summary>
         /// <returns></returns>
-        public async Task<UserLogin> GetRequestToken()
+        public async Task<UserLogin> GetRequestTokenAsync()
         {
-            var requestUrl = MakeRequestString("1/oauth/request_token", ApiType.Base);
-
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-
-            _oauthHandler.Authenticate(request);
-
-            var response = await _httpClient.SendAsync(request);
+            _httpClient.BaseAddress = GetBaseAddress(ApiType.Base);
+            var response = await _httpClient.GetAsync("oauth/request_token");
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
             UserLogin = GetUserLoginFromParams(responseBody);
-
             SetUserToken(UserLogin);
 
             return UserLogin;
@@ -64,7 +58,6 @@ namespace DropNet2
             var requestUrl = MakeRequestString("1/account/info", ApiType.Base);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
-
             var response = await SendAsync<AccountInfo>(request);
 
             return response;

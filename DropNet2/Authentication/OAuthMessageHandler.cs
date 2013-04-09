@@ -1,4 +1,5 @@
-﻿using DropNet2.HttpHelpers;
+﻿using System.Net.Http.Headers;
+using DropNet2.HttpHelpers;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -61,6 +62,30 @@ namespace DropNet2.Authentication
             return request;
         }
 
+        protected override System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+        {
+            string normalizedUri;
+            string authHeader;
+            string normalizedParameters;
+
+            AuthBase.GenerateSignature(
+                request.RequestUri,
+                ApiKey,
+                ApiSecret,
+                UserToken,
+                UserSecret,
+                request.Method.Method,
+                AuthBase.GenerateTimeStamp(),
+                AuthBase.GenerateNonce(),
+                out normalizedUri,
+                out normalizedParameters,
+                out authHeader);
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("OAuth", authHeader);
+
+            return base.SendAsync(request, cancellationToken);
+        }
+
         private static object EncodeParameters(HttpRequest request)
         {
             var querystring = new StringBuilder();
@@ -91,5 +116,12 @@ namespace DropNet2.Authentication
             TimeSpan span = DateTime.UtcNow - new DateTime(0x7b2, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(span.TotalSeconds).ToString();
         }
+
+        private OAuthBase AuthBase
+        {
+            get { return _authBase ?? (_authBase = new OAuthBase()); }
+        }
+
+        private OAuthBase _authBase;
     }
 }

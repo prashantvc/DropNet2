@@ -12,7 +12,7 @@ namespace DropNet2Tests
         public async Task When_Token_Requested_Then_User_Token_Is_Returned()
         {   
             var client = new DropNetClient(AppKey, AppSecret);
-            var userToken = await client.GetRequestToken();
+            var userToken = await client.GetRequestTokenAsync();
             Assert.NotNull(userToken);
         }
 
@@ -21,7 +21,7 @@ namespace DropNet2Tests
         {
             var client = new DropNetClient(AppKey, AppSecret);
 
-            var userToken = await client.GetRequestToken();
+            var userToken = await client.GetRequestTokenAsync();
             string url = client.BuildAuthorizeUrl(userToken, "http://cloudyboxapp.com");
             Assert.IsNotEmpty(url);
         }
@@ -42,7 +42,7 @@ namespace DropNet2Tests
         {
             var client = new DropNetClient(AppKey, AppSecret);
 
-            var userToken = await client.GetRequestToken();
+            var userToken = await client.GetRequestTokenAsync();
             
             //Open the url in browser and login
             string url = client.BuildAuthorizeUrl(userToken, "http://cloudyboxapp.com");
