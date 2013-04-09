@@ -142,7 +142,7 @@ namespace DropNet2
             return JsonConvert.DeserializeObject<T>(responseBody);
         }
 
-        private static Uri GetBaseAddress(ApiType apiType)
+        static Uri GetBaseAddress(ApiType apiType)
         {
             string uri = apiType == ApiType.Base ? ApiBaseUrl : ApiContentBaseUrl;
             return new Uri(uri);

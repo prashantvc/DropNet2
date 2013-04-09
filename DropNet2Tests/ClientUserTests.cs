@@ -6,11 +6,11 @@ namespace DropNet2Tests
 {
     [TestFixture]
     public class ClientUserTests
-    {   
+    {
 
         [Test]
         public async Task When_Token_Requested_Then_User_Token_Is_Returned()
-        {   
+        {
             var client = new DropNetClient(AppKey, AppSecret);
             var userToken = await client.GetRequestTokenAsync();
             Assert.NotNull(userToken);
@@ -30,8 +30,7 @@ namespace DropNet2Tests
         public async Task Given_A_Clent_Get_User_Account_Infromation()
         {
             var client = new DropNetClient(AppKey, AppSecret, UserToken, UserSecret);
-            var accountInfromation = await client.AccountInfo();
-
+            var accountInfromation = await client.AccountInfoAsync();
             Assert.NotNull(accountInfromation);
             Assert.NotNull(accountInfromation.QuotaInfo);
         }
@@ -43,7 +42,7 @@ namespace DropNet2Tests
             var client = new DropNetClient(AppKey, AppSecret);
 
             var userToken = await client.GetRequestTokenAsync();
-            
+
             //Open the url in browser and login
             string url = client.BuildAuthorizeUrl(userToken, "http://cloudyboxapp.com");
             var user = await client.GetAccessToken();

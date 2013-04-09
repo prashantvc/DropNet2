@@ -1,7 +1,12 @@
-﻿using DropNet2.HttpHelpers;
+﻿using System.Diagnostics;
+using System.Net;
+using DropNet2.Exceptions;
+using DropNet2.Helpers;
+using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DropNet2
 {
@@ -29,7 +34,7 @@ namespace DropNet2
         /// Auth Step 3. Once a Request Token has been authorized convert it to an access token for API usage.
         /// </summary>
         /// <returns></returns>
-        public async Task<UserLogin> GetAccessToken()
+        public async Task<UserLogin> GetAccessTokenAsync()
         {
             var requestUrl = MakeRequestString("1/oauth/access_token", ApiType.Base);
 
@@ -53,15 +58,19 @@ namespace DropNet2
         /// Gets the account info of the current logged in user
         /// </summary>
         /// <returns></returns>
-        public async Task<AccountInfo> AccountInfo()
+        public async Task<AccountInfo> AccountInfoAsync()
         {
-            var requestUrl = MakeRequestString("1/account/info", ApiType.Base);
+            _httpClient.BaseAddress = GetBaseAddress(ApiType.Base);
+         
+            using (var response = await _httpClient.GetAsync("account/info"))
+            {
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
 
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-            var response = await SendAsync<AccountInfo>(request);
-
-            return response;
+                return await response.GetResultAsync<AccountInfo>();
+            }
         }
-
     }
 }
