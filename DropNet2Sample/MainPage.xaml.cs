@@ -45,7 +45,7 @@ namespace DropNet2Sample
             _model.ShowBrowser = true;
 
             //Get the request token
-            var requestToken = await App.DropNetClient.GetRequestToken();
+            var requestToken = await App.DropNetClient.GetRequestTokenAsync();
 
             var tokenUrl = App.DropNetClient.BuildAuthorizeUrl(requestToken, _tokenCallbackUrl);
             //Open a browser with the URL
@@ -59,7 +59,7 @@ namespace DropNet2Sample
             {
                 //SUCCESS!
                 _model.SetStatus("Getting Access Token...", true);
-                var accessToken = await App.DropNetClient.GetAccessToken();
+                var accessToken = await App.DropNetClient.GetAccessTokenAsync();
 
                 //TODO - Save this token/Secret for remember me function
 

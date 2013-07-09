@@ -68,7 +68,7 @@ namespace DropNet2.Authentication
             string authHeader;
             string normalizedParameters;
 
-            AuthBase.GenerateSignature(
+           var url = AuthBase.GenerateSignature(
                 request.RequestUri,
                 ApiKey,
                 ApiSecret,

@@ -58,7 +58,7 @@ namespace DropNet2Sample
 
                 if (selected == null) return;
 
-                if (selected.Is_Dir)
+                if (selected.IsDirectory)
                 {
                     //navigate to the new dir
                     _model.LoadPath(selected.Path);

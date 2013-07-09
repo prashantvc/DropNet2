@@ -20,7 +20,7 @@ namespace DropNet2Tests
         public async Task Given_UserToken_When_Build_Auth_Url_Then_The_Authentication_Url_Is_Returned()
         {
             var client = new DropNetClient(AppKey, AppSecret);
-
+            
             var userToken = await client.GetRequestTokenAsync();
             string url = client.BuildAuthorizeUrl(userToken, "http://cloudyboxapp.com");
             Assert.IsNotEmpty(url);
@@ -45,7 +45,7 @@ namespace DropNet2Tests
 
             //Open the url in browser and login
             string url = client.BuildAuthorizeUrl(userToken, "http://cloudyboxapp.com");
-            var user = await client.GetAccessToken();
+            var user = await client.GetAccessTokenAsync();
 
             Assert.NotNull(user);
         }

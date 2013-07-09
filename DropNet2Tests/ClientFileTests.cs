@@ -21,9 +21,9 @@ namespace DropNet2Tests
         [Test]
         public async Task Given_A_Root_Path_Get_Metadata()
         {
-            var data = await _client.GetMetaData("/");
-            Assert.NotNull(data);
-            Assert.IsTrue(data.IsDirectory);
+            await _client.FilePut();
+           // Assert.NotNull(data);
+            //Assert.IsTrue(data.IsDirectory);
         }
 
         [Test]

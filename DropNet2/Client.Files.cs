@@ -31,6 +31,12 @@ namespace DropNet2
             return response;
         }
 
+        public async Task FilePut()
+        {
+            _httpClient.BaseAddress = new Uri("https://api-content.dropbox.com/1/");
+            var d =await _httpClient.PutAsync("dropbox/files_put/data.txt", new StreamContent(new MemoryStream()));
+        }
+
         /// <summary>
         /// Gets a share link from a give path
         /// </summary>
