@@ -1,4 +1,5 @@
 ﻿using DropNet2.Exceptions;
+using DropNet2.Extensions;
 using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ namespace DropNet2
         /// <returns><see cref="MetaData"/> for a file or folder</returns>
         public async Task<MetaData> GetMetaData(string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/metadata/{0}{1}", Root, path), ApiType.Base);
+            var requestUrl = MakeRequestString(string.Format("1/metadata/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
 
@@ -44,9 +45,27 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<ShareResponse> GetShare(string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/shares/{0}{1}", Root, path), ApiType.Base);
+            var requestUrl = MakeRequestString(string.Format("1/shares/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
+
+            var response = await SendAsync<ShareResponse>(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Gets a share link from a give path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="shortUrl"></param>
+        /// <returns></returns>
+        public async Task<ShareResponse> GetShare(string path, bool shortUrl)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/shares/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.Parameters.Add(new HttpParameter("short_url", shortUrl));
 
             var response = await SendAsync<ShareResponse>(request);
 
@@ -71,7 +90,7 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<List<MetaData>> Search(string searchString, string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/search/{0}{1}", Root, path), ApiType.Base);
+            var requestUrl = MakeRequestString(string.Format("1/search/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
             
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
             request.Parameters.Add(new HttpParameter("query", searchString));
@@ -88,7 +107,7 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<byte[]> GetFile(string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
 
@@ -111,7 +130,7 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<MetaData> Upload(string path, string filename, byte[] fileData)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Post, requestUrl);
 
@@ -262,7 +281,7 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<ShareResponse> GetMedia(string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/media/{0}{1}", Root, path), ApiType.Base);
+            var requestUrl = MakeRequestString(string.Format("1/media/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
 
@@ -310,7 +329,7 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<byte[]> GetThumbnail(string path, ThumbnailSize size)
         {
-            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}{1}", Root, path), ApiType.Content);
+            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
             request.AddParameter("size", ThumbnailSizeString(size));
