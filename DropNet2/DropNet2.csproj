@@ -38,11 +38,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\OAuthBase.cs" />
     <Compile Include="Authentication\OAuthMessageHandler.cs" />
     <Compile Include="Client.Files.cs" />
     <Compile Include="Client.Helpers.cs" />
     <Compile Include="Exceptions\DropboxException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\StreamUtils.cs" />
     <Compile Include="HttpHelpers\QueryParameterComparer.cs" />
     <Compile Include="Client.cs" />

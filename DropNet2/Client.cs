@@ -13,8 +13,8 @@ namespace DropNet2
 {
     public partial class DropNetClient
     {
-        private const string ApiBaseUrl = "https://api.dropbox.com";
-        private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
+        private const string ApiBaseUrl = "https://api.dropbox.com/1/";
+        private const string ApiContentBaseUrl = "https://api-content.dropbox.com/1/";
 
         /// <summary>
         /// Do not set this property directly, instead use SetUserToken
@@ -142,5 +142,10 @@ namespace DropNet2
             return JsonConvert.DeserializeObject<T>(responseBody);
         }
 
+        static Uri GetBaseAddress(ApiType apiType)
+        {
+            string uri = apiType == ApiType.Base ? ApiBaseUrl : ApiContentBaseUrl;
+            return new Uri(uri);
+        }
     }
 }
